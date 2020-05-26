@@ -43,7 +43,7 @@ class ConvertFragment : Fragment() {
     }
     private fun setDataToConvert(view: View){
         viewModel.getConvert(
-            "2b3016266ea3bb43a5ff14546026daea", view.edit_from.text.toString().toUpperCase(),
+            getString(R.string.key_api), view.edit_from.text.toString().toUpperCase(),
             view.edit_to.text.toString().toUpperCase(), view.edit_amount.text.toString().toInt()
         )
     }
