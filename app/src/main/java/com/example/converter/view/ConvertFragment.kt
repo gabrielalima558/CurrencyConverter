@@ -29,8 +29,6 @@ class ConvertFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        val context = inflater.context
-
         val view = inflater.inflate(R.layout.convert_fragment, container, false)
 
         view.button.setOnClickListener {
