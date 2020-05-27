@@ -202,10 +202,6 @@ class ListFragment : Fragment() {
 
             val adapter: ArrayAdapter<String> = ArrayAdapter(context,android.R.layout.simple_expandable_list_item_1, list)
             view.list_view.adapter = adapter
-            view.list_view.setOnItemClickListener { parent, view, position, id ->
-
-                Toast.makeText(context, "Item: " + id, Toast.LENGTH_LONG).show()
-            }
 
         })
 
