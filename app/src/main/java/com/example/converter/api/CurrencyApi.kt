@@ -2,7 +2,7 @@ package com.example.converter.api
 
 import android.util.Log
 import com.example.converter.model.Convert
-import com.example.converter.model.Live
+import com.example.converter.model.ListCurrency
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
@@ -11,25 +11,6 @@ import retrofit2.Retrofit
 class CurrencyApi(retrofit: Retrofit) {
     private val service: CurrencyService by lazy {
         retrofit.create(CurrencyService::class.java)
-    }
-    fun callLive(
-        access_key: String,
-        currencies: List<String>,
-        format: Int,
-        lidaComSucesso: (Live) -> Unit
-    ) {
-        val observable = service.getLive(access_key, currencies, format)
-        observable
-            .flatMap { results -> Observable.fromArray(results) }
-            .subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribe({ response ->
-                response?.let(lidaComSucesso)
-
-            }, { error ->
-                Log.e("TESTEERROR", error.message.toString())
-            }
-            )
     }
     fun callConverter(
         access_key: String,
@@ -47,7 +28,22 @@ class CurrencyApi(retrofit: Retrofit) {
                 response?.let(lidaComSucesso)
 
             }, { error ->
-                Log.e("TESTEERROR", error.message.toString())
+                Log.e("Fail", error.message.toString())
+            }
+            )
+    }
+
+    fun callListCurrency(access_key: String, lidaComSucesso: (ListCurrency) -> Unit){
+        val observable = service.getListCurrency(access_key)
+        observable
+            .flatMap { results -> Observable.fromArray(results) }
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe({ response ->
+                response?.let(lidaComSucesso)
+
+            }, { error ->
+                Log.e("Fail", error.message.toString())
             }
             )
     }
