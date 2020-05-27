@@ -1,11 +1,13 @@
 package com.example.converter.view
 
+import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import android.widget.Toast
+import androidx.appcompat.widget.SearchView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
@@ -15,6 +17,7 @@ import com.example.converter.viewmodel.ViewModelFactory
 import kotlinx.android.synthetic.main.list_fragment.view.*
 
 class ListFragment : Fragment() {
+    val list = ArrayList<String>()
 
     private val viewModel: CurrencyViewModel by lazy {
         ViewModelProvider(this, ViewModelFactory).get(CurrencyViewModel::class.java)
@@ -30,7 +33,6 @@ class ListFragment : Fragment() {
 
         viewModel.getList(getString(R.string.key_api))
         viewModel.list().observe(this, Observer {
-            val list = ArrayList<String>()
             list.add("AED" + " " + it.currencies.AED)
             list.add("AFN" + " " + it.currencies.AFN)
             list.add("ALL" + " " + it.currencies.ALL)
@@ -203,9 +205,37 @@ class ListFragment : Fragment() {
             val adapter: ArrayAdapter<String> = ArrayAdapter(context,android.R.layout.simple_expandable_list_item_1, list)
             view.list_view.adapter = adapter
 
+            search(view, context)
+
         })
 
         return view
+    }
+    private fun search(view: View, context: Context){
+        val search = view.edit_search
+
+        search.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+            override fun onQueryTextSubmit(texto: String?): Boolean {
+                return false
+            }
+
+            override fun onQueryTextChange(texto: String?): Boolean {
+
+                if (!texto.isNullOrBlank()) {
+
+                    val itensFiltrados = filterBy(texto)
+                    val adapter: ArrayAdapter<String> = ArrayAdapter(context,android.R.layout.simple_expandable_list_item_1, itensFiltrados)
+                    view.list_view.adapter = adapter
+
+                }
+
+                return true
+            }
+        })
+    }
+    private fun filterBy(texto: String): List<String> {
+
+        return list.filter { item -> item.contains(texto, true) }
     }
 
 }
